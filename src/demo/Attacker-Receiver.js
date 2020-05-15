@@ -106,7 +106,6 @@ class AttackerReceiver extends Component {
 
             </select>
           </div>
-
           <div className='tag-entry-box-receiver'>
             <button onClick={this.addReceiver}>Receiver</button>
             {buttonReceiver}
