@@ -202,7 +202,7 @@ class App extends Component {
                     onMouseUp={this.handleSeekMouseUp}
                     onInput={this.outputValue}
                   />
-                  <output name='ageOutputName' id='ageOutputId'><Duration seconds={duration * played} /></output>
+                  <output name='ageOutputName' id='ageOutputId'>Time : <Duration seconds={duration * played} /></output>
                 </td>
               </tr>
               <tr>

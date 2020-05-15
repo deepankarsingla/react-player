@@ -99,12 +99,12 @@ class AttackerReceiver extends Component {
           <div className='tag-entry-box-attacker'>
             <button onClick={this.addAttacker}>Attacker</button>
             {buttonAttacker}
-            <ul>
-              {this.state.attackerList.map(function (todo) {
-                return <li key={todo}>{todo}</li>
+            <select name='color4' size='5' multiple onChange={this.doSomething}>
+            {this.state.attackerList.map(function (todo) {
+                return <option key={todo}>{todo}</option>
               })}
 
-            </ul>
+            </select>
           </div>
 
           <div className='tag-entry-box-receiver'>
