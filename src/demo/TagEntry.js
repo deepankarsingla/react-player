@@ -9,7 +9,7 @@ class TagEntry extends Component {
     this.state = {
       isClicked: false,
       value: '',
-      tagList: []
+      tagList: ["Healthcare", "Foreign Policy", "Immigration", "Economy", "Civil Right", "Gun Control", "Climate Change", "Women Right", "Education"]
     }
   }
 

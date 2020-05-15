@@ -10,9 +10,9 @@ class AttackerReceiver extends Component {
     this.doSomething = this.doSomething.bind(this)
 
     this.state = {
-      attackerList: [],
+      attackerList: ["All", "Bernie Sanders", "Joe Biden", "Pete Buttigieg", "Amy Klobuchar", "Michael Bloomberg", "Elizabeth Warren", "Rocky De La Fuente", "Tulsi Gabbard"],
       attacker: '',
-      receiverList: [],
+      receiverList: ["All", "Bernie Sanders", "Joe Biden", "Pete Buttigieg", "Amy Klobuchar", "Michael Bloomberg", "Elizabeth Warren", "Rocky De La Fuente", "Tulsi Gabbard"],
       receiver: '',
       isClickedAttacker: false,
       isClickedReceiver: false
