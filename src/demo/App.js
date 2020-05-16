@@ -4,6 +4,7 @@ import { hot } from 'react-hot-loader'
 import screenfull from 'screenfull'
 import TagEntry from './TagEntry'
 import AttackerReceiver from './Attacker-Receiver'
+import  SaveEntry from "./SaveEntry"
 
 import './reset.css'
 import './defaults.css'
@@ -25,7 +26,8 @@ class App extends Component {
     loaded: 0,
     duration: 0,
     playbackRate: 1.0,
-    loop: false
+    loop: false,
+    langValue:''
   }
 
   load = url => {
@@ -144,6 +146,11 @@ class App extends Component {
     this.player = player
   }
 
+  handleLanguage = (langValue) => {
+    console.log("lang...",langValue);
+    this.setState({language: langValue});
+  }
+
   render () {
     const { url, playing, controls, light, volume, muted, loop, played, duration, playbackRate, pip } = this.state
     return (
@@ -237,9 +244,10 @@ class App extends Component {
         </section>
 
         <section>
+          <AttackerReceiver onSelectLanguage={this.handleLanguage}/>
           <TagEntry />
-          <AttackerReceiver />
         </section>
+        <SaveEntry/>
 
       </div>
     )

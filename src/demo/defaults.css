@@ -84,19 +84,26 @@ button {
   height: 230px;
   margin-bottom: 3px;
   margin-top: 10px;
+  margin-right: 190px;
 }
 .tag-entry-box-receiver{
   border: 1px solid black;
   float: right;
-  width: 30%;
+  width: 20%;
   height: 230px;
   margin-bottom: 3px;
+  margin-right: 80px;
+  display: inline-block;
 }
 
 .tag-entry-box-attacker{
   border: 1px solid black;
-  float: right;
-  width: 30%;
+  width: 20%;
   height: 230px;
   margin-bottom: 3px;
+  display: inline-block;
+}
+
+.save-button{
+  float: right;
 }

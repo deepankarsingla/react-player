@@ -21,8 +21,10 @@ class AttackerReceiver extends Component {
 
     doSomething = e => {
       // eslint-disable-next-line no-undef
-      alert(e.target.value)
+      //alert(e.target.value)
+      this.props.onSelectLanguage(e.target.value);
     }
+
 
   addAttacker = ev => {
     this.setState({ isClickedAttacker: true })
