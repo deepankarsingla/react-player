@@ -4,6 +4,7 @@ import { hot } from 'react-hot-loader'
 import screenfull from 'screenfull'
 import TagEntry from './TagEntry'
 import AttackerReceiver from './Attacker-Receiver'
+import DisplayTable from './DisplayTable'
 
 import './reset.css'
 import './defaults.css'
@@ -239,6 +240,7 @@ class App extends Component {
         <section>
           <TagEntry />
           <AttackerReceiver />
+          <DisplayTable/>
         </section>
 
       </div>

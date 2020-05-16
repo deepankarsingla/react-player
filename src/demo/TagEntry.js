@@ -15,7 +15,7 @@ class TagEntry extends Component {
 
     doSomething = e => {
       // eslint-disable-next-line no-undef
-      alert(e.target.value)
+      // alert(e.target.value)
     }
 
     addInput = ev => {
