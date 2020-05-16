@@ -5,6 +5,7 @@ import screenfull from 'screenfull'
 import TagEntry from './TagEntry'
 import AttackerReceiver from './Attacker-Receiver'
 import  SaveEntry from "./SaveEntry"
+import DisplayTable from './DisplayTable'
 
 import './reset.css'
 import './defaults.css'
@@ -246,8 +247,9 @@ class App extends Component {
         <section>
           <AttackerReceiver onSelectLanguage={this.handleLanguage}/>
           <TagEntry />
-        </section>
+          <DisplayTable/>
         <SaveEntry/>
+        </section>
 
       </div>
     )

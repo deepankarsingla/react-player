@@ -20,9 +20,8 @@ class AttackerReceiver extends Component {
   }
 
     doSomething = e => {
-      // eslint-disable-next-line no-undef
-      //alert(e.target.value)
       this.props.onSelectLanguage(e.target.value);
+
     }
 
 
@@ -108,7 +107,6 @@ class AttackerReceiver extends Component {
 
             </select>
           </div>
-
           <div className='tag-entry-box-receiver'>
             <button onClick={this.addReceiver}>Receiver</button>
             {buttonReceiver}
