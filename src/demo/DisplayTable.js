@@ -15,7 +15,6 @@ let rows = [
   createData('9:11', '9:55','Economy','Joe Biden','Donal Trump'),
 ];
 
-
 class DisplayTable extends Component {
   render() {
     return(
