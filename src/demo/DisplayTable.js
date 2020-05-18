@@ -9,10 +9,15 @@ function createData(StartTime, EndTime , Topic ,Attacker, Receiver) {
 
 let rows = [
   createData('StartTime', 'EndTime','Topic','Attacker','Receiver'),
-  createData('1:04', '5:03','Economy','Joe Biden','Donald Trump'),
-  createData('5:04', '6:10','Economy','Joe Biden','Donal Trump'),
-  createData('6:11', '9:10','Economy','Joe Biden','Donal Trump'),
-  createData('9:11', '9:55','Economy','Joe Biden','Donal Trump'),
+  createData('0:00', '1:33','Education','Audience','Hillary Clinton'),
+  createData('1:34', '3:10','Education','Hillary Clinton','Audience'),
+  createData('3:11', '5:43','Education','Donald Trump','Audience'),
+  createData('5:44', '6:07','Women Rights','Host','Donald Trump'),
+  createData('6:08', '7:14','Women Rights','Donald Trump','All'),
+  createData('7:15', '7:23','Women Rights','Host','Donald Trump'),
+  createData('7:24', '8:08','Women Rights','Donald Trump','All'),
+  createData('8:09', '11:00','Women Rights','Hillary Clinton','Audience')
+
 ];
 
 class DisplayTable extends Component {

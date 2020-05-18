@@ -16,7 +16,7 @@ import ReactPlayer from '../ReactPlayer'
 import Duration from './Duration'
 class App extends Component {
   state = {
-    url: 'https://www.youtube.com/watch?v=RjPhkrfOesc',
+    url: 'https://www.youtube.com/watch?v=FRlI2SQ0Ueg',
     pip: false,
     playing: true,
     controls: false,

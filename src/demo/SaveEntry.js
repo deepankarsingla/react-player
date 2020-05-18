@@ -11,7 +11,9 @@ class SaveEntry extends Component {
 
   render () {
     return (
+
       <div className='save-button'>
+        <button onClick={this.addInput}>Tag</button>
         <button onClick={this.addInput}>Save</button>
       </div>
     )
