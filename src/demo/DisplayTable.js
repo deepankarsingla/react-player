@@ -24,7 +24,7 @@ class DisplayTable extends Component {
   render() {
     return(
       <div>
-        <table>
+        <table class="beta">
           {rows.map(row => (
             <tr key={row.id}>
               {/*<td>{row.id}</td>*/}

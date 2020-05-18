@@ -243,7 +243,7 @@ class App extends Component {
             </tbody>
           </table>
         </section>
-
+<div>
         <section>
           <td>
             <AttackerReceiver onSelectLanguage={this.handleLanguage}/></td>
@@ -256,7 +256,7 @@ class App extends Component {
           </tr>
 
         </section>
-
+</div>
       </div>
     )
   }
