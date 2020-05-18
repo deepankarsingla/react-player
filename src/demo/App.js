@@ -245,10 +245,16 @@ class App extends Component {
         </section>
 
         <section>
-          <AttackerReceiver onSelectLanguage={this.handleLanguage}/>
-          <TagEntry />
-          <SaveEntry/>
-          <DisplayTable/>
+          <td>
+            <AttackerReceiver onSelectLanguage={this.handleLanguage}/></td>
+          <tr>
+            <TagEntry />
+            <SaveEntry/>
+          </tr>
+          <tr>
+            <DisplayTable/>
+          </tr>
+
         </section>
 
       </div>

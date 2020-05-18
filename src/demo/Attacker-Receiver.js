@@ -12,7 +12,7 @@ class AttackerReceiver extends Component {
     this.state = {
       attackerList: ["All", "Audience","Host", "Donald Trump", "Hillary Clinton", "Bernie Sanders", "Joe Biden", "Pete Buttigieg", "Amy Klobuchar", "Michael Bloomberg", "Elizabeth Warren", "Rocky De La Fuente", "Tulsi Gabbard"],
       attacker: '',
-      receiverList: ["All", "Audience","Host","Donald Trump", "Hillary Clinton","Bernie Sanders", "Joe Biden", "Pete Buttigieg", "Amy Klobuchar", "Michael Bloomberg", "Elizabeth Warren", "Rocky De La Fuente", "Tulsi Gabbard"],
+      receiverList: ["All", "Audience","Host", "Donald Trump", "Hillary Clinton","Bernie Sanders", "Joe Biden", "Pete Buttigieg", "Amy Klobuchar", "Michael Bloomberg", "Elizabeth Warren", "Rocky De La Fuente", "Tulsi Gabbard"],
       receiver: '',
       isClickedAttacker: false,
       isClickedReceiver: false
