@@ -98,7 +98,8 @@
   "dependencies": {
     "deepmerge": "^4.0.0",
     "load-script": "^1.0.0",
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "react-csv": "^2.0.3"
   },
   "babel": {
     "presets": [

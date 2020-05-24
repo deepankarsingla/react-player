@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+
 class TagEntry extends Component {
   constructor (props) {
     super(props)
@@ -55,6 +56,7 @@ class TagEntry extends Component {
             })}
 
           </select>
+
         </div>
       )
     }

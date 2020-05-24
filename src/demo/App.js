@@ -14,6 +14,7 @@ import './App.css'
 
 import ReactPlayer from '../ReactPlayer'
 import Duration from './Duration'
+import { CSVLink, CSVDownload } from "react-csv";
 
 let id = 0;
 function createData(StartTime, EndTime , Topic ,Attacker, Receiver) {
@@ -275,6 +276,7 @@ class App extends Component {
           </tr>
 
         </section>
+    <CSVLink data={this.state.rows}>Download</CSVLink>
 </div>
       </div>
     )

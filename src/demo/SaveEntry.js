@@ -14,7 +14,6 @@ class SaveEntry extends Component {
 
       <div className='save-button'>
         <button onClick={this.sendDataToTable}>Tag</button>
-        <button onClick={this.addInput}>Save</button>
       </div>
     )
   }
