@@ -243,7 +243,8 @@ class App extends Component {
             </tbody>
           </table>
         </section>
-<<<<<<< HEAD
+{/*<<<<<<< HEAD*/}
+{/*<<<<<<< HEAD*/}
           <div>
               <section>
                 <td>
@@ -260,22 +261,27 @@ class App extends Component {
                 </tr>
               </section>
           </div>
-=======
+{/*=======*/}
+{/*=======*/}
+{/*>>>>>>> parent of 20badf0... css 2*/}
 
-        <section>
-          <td>
-            <AttackerReceiver onSelectLanguage={this.handleLanguage}/></td>
-          <tr>
-            <TagEntry />
-            <SaveEntry/>
-          </tr>
-          <tr>
-            <DisplayTable/>
-          </tr>
+{/*        <section>*/}
+{/*          <td>*/}
+{/*            <AttackerReceiver onSelectLanguage={this.handleLanguage}/></td>*/}
+{/*          <tr>*/}
+{/*            <TagEntry />*/}
+{/*            <SaveEntry/>*/}
+{/*          </tr>*/}
+{/*          <tr>*/}
+{/*            <DisplayTable/>*/}
+{/*          </tr>*/}
 
-        </section>
+{/*        </section>*/}
 
->>>>>>> parent of 20badf0... css 2
+{/*<<<<<<< HEAD*/}
+{/*>>>>>>> parent of 20badf0... css 2*/}
+{/*=======*/}
+{/*>>>>>>> parent of 20badf0... css 2*/}
       </div>
     )
   }

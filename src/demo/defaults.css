@@ -44,6 +44,8 @@ th {
   vertical-align: middle;
 }
 
+
+
 [type=text],
 textarea {
   width: 200px;
@@ -76,7 +78,14 @@ button {
 &:hover {  background: darken($light-grey, 10); }
 &:active { background: darken($light-grey, 15); }
 }
-
++.beta {
+  margin-left: 20px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+.beta table,.beta td,.beta th {
+  border: 1px solid black;
+}
 .tag-entry-box{
   border: 1px solid black;
   float: right;
@@ -87,12 +96,12 @@ button {
   margin-right: 190px;
 }
 .tag-entry-box-receiver{
+  width: 20%;
+  margin-bottom: 3px;
+  margin-right: 20px;
   border: 1px solid black;
   float: right;
-  width: 20%;
   height: 230px;
-  margin-bottom: 3px;
-  margin-right: 80px;
   display: inline-block;
 }
 
