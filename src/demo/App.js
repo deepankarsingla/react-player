@@ -79,6 +79,7 @@ class App extends Component {
     this.setState({ playing: !this.state.playing,
       startTime: this.state.endTime+1,
       endTime: this.state.duration * this.state.played
+
     })
   }
 
@@ -285,21 +286,23 @@ class App extends Component {
             </tbody>
           </table>
         </section>
-<div>
-        <section>
-          <td>
-            <AttackerReceiver onSelectAttacker={this.handleAttacker} onSelectReceiver={this.handleReceiver}/></td>
-          <tr>
-            <TagEntry onSelectedTag={this.handleTags}/>
-            <SaveEntry onSendData={this.handleSendingData}/>
-            </tr>
-          <tr>
-            <DisplayTable rows={this.state.rows} />
-          </tr>
+          <div>
+              <section>
+                <td>
+                  <AttackerReceiver onSelectAttacker={this.handleAttacker} onSelectReceiver={this.handleReceiver}/></td>
+                <tr>
+                  <TagEntry onSelectedTag={this.handleTags}/>
+                  <SaveEntry onSendData={this.handleSendingData}/>
 
-        </section>
-    <CSVLink data={this.state.rows}>Save</CSVLink>
-</div>
+                </tr>
+                <CSVLink data={this.state.rows}>Save (As CSV)</CSVLink>
+
+                <tr>
+                  <DisplayTable rows={this.state.rows} />
+
+                </tr>
+              </section>
+          </div>
       </div>
     )
   }
