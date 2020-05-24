@@ -10,7 +10,7 @@ class TagEntry extends Component {
     this.state = {
       isClicked: false,
       value: '',
-      tagList: ["Healthcare", "Foreign Policy", "Immigration", "Economy", "Civil Right", "Gun Control", "Climate Change", "Women Right", "Education"]
+      tagList: ["Healthcare", "Foreign Policy", "Immigration"]
     }
   }
 
@@ -47,9 +47,8 @@ class TagEntry extends Component {
       }
       return (
         <div className='tag-entry-box'>
-          <button onClick={this.addInput}>+</button>
-          {button}
-
+          <button onClick={this.addInput}>Topic</button>
+          <input type='text' value={this.state.value} onChange={this.handleChange} onKeyDown={this.keyPress} />
           <select name='color4' size='5' multiple onChange={this.getTagName}>
             {this.state.tagList.map(function (todo) {
               return <option key={todo}>{todo}</option>

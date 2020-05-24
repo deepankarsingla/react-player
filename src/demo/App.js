@@ -22,6 +22,25 @@ function createData(StartTime, EndTime , Topic ,Attacker, Receiver) {
   return { id, StartTime, EndTime, Topic ,Attacker, Receiver};
 }
 
+function fancyTimeFormat(time)
+{
+  // Hours, minutes and seconds
+  var hrs = ~~(time / 3600);
+  var mins = ~~((time % 3600) / 60);
+  var secs = ~~time % 60;
+
+  // Output like "1:01" or "4:03:59" or "123:03:59"
+  var ret = "";
+
+  if (hrs > 0) {
+    ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+  }
+
+  ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+  ret += "" + secs;
+  return ret;
+}
+
 class App extends Component {
   state = {
     url: 'https://www.youtube.com/watch?v=FRlI2SQ0Ueg',
@@ -131,14 +150,17 @@ class App extends Component {
     this.player = player
   }
 
+
+
   handleSendingData = (e) => {
     const value =  this.state.receiverList && this.state.receiverList.length>0 && this.state.attackerList &&this.state.attackerList.length>0;
     let rows = [...this.state.rows];
     let len1 = this.state.attackerList.length;
     let len2 = this.state.receiverList.length;
     let len3 = this.state.tagList.length;
+
     if(value){
-      rows.push(createData(this.state.startTime, this.state.endTime/60, this.state.tagList[len3-1], this.state.attackerList[len1-1], this.state.receiverList[len2-1]));
+      rows.push(createData(fancyTimeFormat(this.state.startTime), fancyTimeFormat(this.state.endTime), this.state.tagList[len3-1], this.state.attackerList[len1-1], this.state.receiverList[len2-1]));
     }
     this.setState({
       rows
@@ -270,13 +292,13 @@ class App extends Component {
           <tr>
             <TagEntry onSelectedTag={this.handleTags}/>
             <SaveEntry onSendData={this.handleSendingData}/>
-          </tr>
+            </tr>
           <tr>
-            <DisplayTable rows={this.state.rows} />;
+            <DisplayTable rows={this.state.rows} />
           </tr>
 
         </section>
-    <CSVLink data={this.state.rows}>Download</CSVLink>
+    <CSVLink data={this.state.rows}>Save</CSVLink>
 </div>
       </div>
     )

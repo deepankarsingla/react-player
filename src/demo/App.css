@@ -38,3 +38,23 @@ $gutter-width: 20px;
 .url-input-box{
   width: 90%;
 }
+.tag-entry-box-attacker button{
+  float: left;
+}
+
+.tag-entry-box-receiver button{
+  float: left;
+}
+
+.tag-entry-box button,  .tag-entry-box input, .tag-entry-box select{
+  float: left;
+}
+
+.tag-entry-box select{
+  width: 140px;
+}
+
+.attacker-select, .receiver-select{
+  width: 140px;
+  height: 120px;
+}
