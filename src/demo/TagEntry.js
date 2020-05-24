@@ -15,7 +15,7 @@ class TagEntry extends Component {
 
   getTagName = e => {
     console.log(e.target.value);
-    this.props.onSelectTag(e.target.value);
+    this.props.onSelectedTag(e.target.value);
   }
 
     addInput = ev => {

@@ -38,6 +38,7 @@ class App extends Component {
     langValue:'',
     attackerList:[],
     receiverList:[],
+    tagList:[],
     isSendingData:false,
     rows:[createData('StartTime', 'EndTime','Topic','Attacker','Receiver')],
     startTime:0,
@@ -134,8 +135,9 @@ class App extends Component {
     let rows = [...this.state.rows];
     let len1 = this.state.attackerList.length;
     let len2 = this.state.receiverList.length;
+    let len3 = this.state.tagList.length;
     if(value){
-      rows.push(createData(this.state.startTime, this.state.endTime/60, 'test', this.state.attackerList[len1-1], this.state.receiverList[len2-1]));
+      rows.push(createData(this.state.startTime, this.state.endTime/60, this.state.tagList[len3-1], this.state.attackerList[len1-1], this.state.receiverList[len2-1]));
     }
     this.setState({
       rows
@@ -161,9 +163,9 @@ class App extends Component {
 
   handleTags= (tag) => {
     let tagList = []
-    receiverList.push(receiver)
+    tagList.push(tag)
     this.setState({
-      receiverList
+      tagList
     })
 
   }
