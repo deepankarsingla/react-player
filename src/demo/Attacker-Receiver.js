@@ -7,7 +7,8 @@ class AttackerReceiver extends Component {
     this.handleChangeReceiver = this.handleChangeReceiver.bind(this)
     this.keyPressAttacker = this.keyPressAttacker.bind(this)
     this.keyPressReceiver = this.keyPressReceiver.bind(this)
-    this.doSomething = this.doSomething.bind(this)
+    this.getAttackerName = this.getAttackerName.bind(this)
+    this.getReceiverName = this.getReceiverName.bind(this)
 
     this.state = {
       attackerList: ["All", "Audience","Host", "Donald Trump", "Hillary Clinton", "Bernie Sanders", "Joe Biden", "Pete Buttigieg", "Amy Klobuchar", "Michael Bloomberg", "Elizabeth Warren", "Rocky De La Fuente", "Tulsi Gabbard"],
@@ -19,10 +20,16 @@ class AttackerReceiver extends Component {
     }
   }
 
-    doSomething = e => {
-      this.props.onSelectLanguage(e.target.value);
+  getAttackerName = e => {
+    console.log(e.target.value);
+      this.props.onSelectAttacker(e.target.value);
 
     }
+
+  getReceiverName = e => {
+    this.props.onSelectReceiver(e.target.value);
+
+  }
 
 
   addAttacker = ev => {
@@ -100,7 +107,7 @@ class AttackerReceiver extends Component {
           <div className='tag-entry-box-attacker'>
             <button onClick={this.addAttacker}>Attacker</button>
             {buttonAttacker}
-            <select name='color4' size='5' multiple onChange={this.doSomething}>
+            <select name='color4' size='5' multiple onChange={this.getAttackerName}>
             {this.state.attackerList.map(function (todo) {
                 return <option key={todo}>{todo}</option>
               })}
@@ -110,7 +117,7 @@ class AttackerReceiver extends Component {
           <div className='tag-entry-box-receiver'>
             <button onClick={this.addReceiver}>Receiver</button>
             {buttonReceiver}
-            <select name='color4' size='5' multiple onChange={this.doSomething}>
+            <select name='color4' size='5' multiple onChange={this.getReceiverName}>
               {this.state.receiverList.map(function (todo) {
                 return <option key={todo}>{todo}</option>
               })}

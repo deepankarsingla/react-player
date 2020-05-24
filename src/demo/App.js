@@ -14,6 +14,13 @@ import './App.css'
 
 import ReactPlayer from '../ReactPlayer'
 import Duration from './Duration'
+
+let id = 0;
+function createData(StartTime, EndTime , Topic ,Attacker, Receiver) {
+  id += 1;
+  return { id, StartTime, EndTime, Topic ,Attacker, Receiver};
+}
+
 class App extends Component {
   state = {
     url: 'https://www.youtube.com/watch?v=FRlI2SQ0Ueg',
@@ -28,7 +35,13 @@ class App extends Component {
     duration: 0,
     playbackRate: 1.0,
     loop: false,
-    langValue:''
+    langValue:'',
+    attackerList:[],
+    receiverList:[],
+    isSendingData:false,
+    rows:[createData('StartTime', 'EndTime','Topic','Attacker','Receiver')],
+    startTime:0,
+    endTime:0
   }
 
   load = url => {
@@ -40,36 +53,20 @@ class App extends Component {
     })
   }
 
+
   handlePlayPause = () => {
-    this.setState({ playing: !this.state.playing })
+    this.setState({ playing: !this.state.playing,
+      startTime: this.state.endTime+1,
+      endTime: this.state.duration * this.state.played
+    })
   }
 
   handleStop = () => {
     this.setState({ url: null, playing: false })
   }
 
-  handleToggleControls = () => {
-    const url = this.state.url
-    this.setState({
-      controls: !this.state.controls,
-      url: null
-    }, () => this.load(url))
-  }
-
-  handleToggleLight = () => {
-    this.setState({ light: !this.state.light })
-  }
-
-  handleToggleLoop = () => {
-    this.setState({ loop: !this.state.loop })
-  }
-
   handleVolumeChange = e => {
     this.setState({ volume: parseFloat(e.target.value) })
-  }
-
-  handleToggleMuted = () => {
-    this.setState({ muted: !this.state.muted })
   }
 
   handleSetPlaybackRate = e => {
@@ -81,22 +78,18 @@ class App extends Component {
   }
 
   handlePlay = () => {
-    console.log('onPlay')
     this.setState({ playing: true })
   }
 
   handleEnablePIP = () => {
-    console.log('onEnablePIP')
     this.setState({ pip: true })
   }
 
   handleDisablePIP = () => {
-    console.log('onDisablePIP')
     this.setState({ pip: false })
   }
 
   handlePause = () => {
-    console.log('onPause')
     this.setState({ playing: false })
   }
 
@@ -114,7 +107,6 @@ class App extends Component {
   }
 
   handleProgress = state => {
-    console.log('onProgress', state)
     // We only want to update time slider if we are not currently seeking
     if (!this.state.seeking) {
       this.setState(state)
@@ -122,12 +114,10 @@ class App extends Component {
   }
 
   handleEnded = () => {
-    console.log('onEnded')
     this.setState({ playing: this.state.loop })
   }
 
   handleDuration = (duration) => {
-    console.log('onDuration', duration)
     this.setState({ duration })
   }
 
@@ -135,24 +125,51 @@ class App extends Component {
     screenfull.request(findDOMNode(this.player))
   }
 
-  renderLoadButton = (url, label) => {
-    return (
-      <button onClick={() => this.load(url)}>
-        {label}
-      </button>
-    )
-  }
-
   ref = player => {
     this.player = player
   }
 
-  handleLanguage = (langValue) => {
-    console.log("lang...",langValue);
-    this.setState({language: langValue});
+  handleSendingData = (e) => {
+    const value =  this.state.receiverList && this.state.receiverList.length>0 && this.state.attackerList &&this.state.attackerList.length>0;
+    let rows = [...this.state.rows];
+    let len1 = this.state.attackerList.length;
+    let len2 = this.state.receiverList.length;
+    if(value){
+      rows.push(createData(this.state.startTime, this.state.endTime/60, 'test', this.state.attackerList[len1-1], this.state.receiverList[len2-1]));
+    }
+    this.setState({
+      rows
+    })
+  }
+
+  handleAttacker = (attacker) => {
+    let attackerList = [...this.state.attackerList]
+    attackerList.push(attacker)
+    this.setState({
+      attackerList
+    })
+  }
+
+  handleReceiver = (receiver) => {
+    console.log("lang...",receiver);
+    let receiverList = []
+    receiverList.push(receiver)
+    this.setState({
+      receiverList
+    })
+  }
+
+  handleTags= (tag) => {
+    let tagList = []
+    receiverList.push(receiver)
+    this.setState({
+      receiverList
+    })
+
   }
 
   render () {
+    console.log("here......");
     const { url, playing, controls, light, volume, muted, loop, played, duration, playbackRate, pip } = this.state
     return (
       <div className='app'>
@@ -246,13 +263,13 @@ class App extends Component {
 <div>
         <section>
           <td>
-            <AttackerReceiver onSelectLanguage={this.handleLanguage}/></td>
+            <AttackerReceiver onSelectAttacker={this.handleAttacker} onSelectReceiver={this.handleReceiver}/></td>
           <tr>
-            <TagEntry />
-            <SaveEntry/>
+            <TagEntry onSelectedTag={this.handleTags}/>
+            <SaveEntry onSendData={this.handleSendingData}/>
           </tr>
           <tr>
-            <DisplayTable/>
+            <DisplayTable rows={this.state.rows} />;
           </tr>
 
         </section>

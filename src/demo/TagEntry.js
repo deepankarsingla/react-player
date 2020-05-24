@@ -13,10 +13,10 @@ class TagEntry extends Component {
     }
   }
 
-    doSomething = e => {
-      // eslint-disable-next-line no-undef
-      // alert(e.target.value)
-    }
+  getTagName = e => {
+    console.log(e.target.value);
+    this.props.onSelectTag(e.target.value);
+  }
 
     addInput = ev => {
       this.setState({ isClicked: true })
@@ -49,7 +49,7 @@ class TagEntry extends Component {
           <button onClick={this.addInput}>+</button>
           {button}
 
-          <select name='color4' size='5' multiple onChange={this.doSomething}>
+          <select name='color4' size='5' multiple onChange={this.getTagName}>
             {this.state.tagList.map(function (todo) {
               return <option key={todo}>{todo}</option>
             })}

@@ -3,17 +3,17 @@ import React, { Component } from 'react'
 class SaveEntry extends Component {
   constructor (props) {
     super(props)
-    this.addInput = this.addInput.bind(this)
+    this.sendDataToTable = this.sendDataToTable.bind(this)
   }
-  addInput = ev => {
-    console.log("adding");
+  sendDataToTable = ev => {
+    this.props.onSendData(true)
   }
 
   render () {
     return (
 
       <div className='save-button'>
-        <button onClick={this.addInput}>Tag</button>
+        <button onClick={this.sendDataToTable}>Tag</button>
         <button onClick={this.addInput}>Save</button>
       </div>
     )
