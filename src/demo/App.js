@@ -6,6 +6,7 @@ import TagEntry from './TagEntry'
 import AttackerReceiver from './Attacker-Receiver'
 import  SaveEntry from "./SaveEntry"
 import DisplayTable from './DisplayTable'
+import testtable from './testtable'
 
 import './reset.css'
 import './defaults.css'
@@ -239,24 +240,25 @@ class App extends Component {
                   <input type='range' min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />
                 </td>
               </tr>
-
             </tbody>
           </table>
         </section>
-<div>
-        <section>
-          <td>
-            <AttackerReceiver onSelectLanguage={this.handleLanguage}/></td>
-          <tr>
-            <TagEntry />
-            <SaveEntry/>
-          </tr>
-          <tr>
-            <DisplayTable/>
-          </tr>
-
-        </section>
-</div>
+          <div>
+              <section>
+                <td>
+                  <AttackerReceiver onSelectLanguage={this.handleLanguage}/></td>
+                <tr>
+                  <TagEntry />
+                  <SaveEntry/>
+                </tr>
+                <tr>
+                  <DisplayTable/>
+                </tr>
+                <tr>
+                  <testtable/>
+                </tr>
+              </section>
+          </div>
       </div>
     )
   }

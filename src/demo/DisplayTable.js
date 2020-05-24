@@ -17,7 +17,6 @@ let rows = [
   createData('7:15', '7:23','Women Rights','Host','Donald Trump'),
   createData('7:24', '8:08','Women Rights','Donald Trump','All'),
   createData('8:09', '11:00','Women Rights','Hillary Clinton','Audience')
-
 ];
 
 class DisplayTable extends Component {
