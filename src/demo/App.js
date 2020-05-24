@@ -243,6 +243,7 @@ class App extends Component {
             </tbody>
           </table>
         </section>
+<<<<<<< HEAD
           <div>
               <section>
                 <td>
@@ -259,6 +260,22 @@ class App extends Component {
                 </tr>
               </section>
           </div>
+=======
+
+        <section>
+          <td>
+            <AttackerReceiver onSelectLanguage={this.handleLanguage}/></td>
+          <tr>
+            <TagEntry />
+            <SaveEntry/>
+          </tr>
+          <tr>
+            <DisplayTable/>
+          </tr>
+
+        </section>
+
+>>>>>>> parent of 20badf0... css 2
       </div>
     )
   }
