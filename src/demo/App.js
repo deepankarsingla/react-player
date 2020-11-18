@@ -6,6 +6,7 @@ import TagEntry from './TagEntry'
 import AttackerReceiver from './Attacker-Receiver'
 import  SaveEntry from "./SaveEntry"
 import DisplayTable from './DisplayTable'
+import OverviewGridHist from './Test'
 
 import './reset.css'
 import './defaults.css'
@@ -15,6 +16,7 @@ import './App.css'
 import ReactPlayer from '../ReactPlayer'
 import Duration from './Duration'
 import { CSVLink, CSVDownload } from "react-csv";
+import Bubble from './Bubble'
 
 let id = 0;
 function createData(StartTime, EndTime , Topic ,Attacker, Receiver) {
@@ -194,8 +196,10 @@ class App extends Component {
 
   }
 
+
   render () {
     console.log("here......");
+    const rawdata = [{v:33}, {v:10}, {v:6}]
     const { url, playing, controls, light, volume, muted, loop, played, duration, playbackRate, pip } = this.state
     return (
       <div className='app'>
@@ -268,40 +272,26 @@ class App extends Component {
                     <button onClick={this.handleTogglePIP}>{pip ? 'Disable PiP' : 'Enable PiP'}</button>}
                 </td>
               </tr>
-              <tr>
-                <th>Speed</th>
-                <td>
-                  <button onClick={this.handleSetPlaybackRate} value={1}>1x</button>
-                  <button onClick={this.handleSetPlaybackRate} value={1.5}>1.5x</button>
-                  <button onClick={this.handleSetPlaybackRate} value={2}>2x</button>
-                </td>
-              </tr>
-              <tr>
-                <th>Volume</th>
-                <td>
-                  <input type='range' min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />
-                </td>
-              </tr>
-
             </tbody>
           </table>
         </section>
           <div>
-              <section>
-                <td>
-                  <AttackerReceiver onSelectAttacker={this.handleAttacker} onSelectReceiver={this.handleReceiver}/></td>
-                <tr>
-                  <TagEntry onSelectedTag={this.handleTags}/>
-                  <SaveEntry onSendData={this.handleSendingData}/>
+            <Bubble useLabels data={rawdata} />
+              {/*<section>*/}
+              {/*  <td>*/}
+              {/*    <AttackerReceiver onSelectAttacker={this.handleAttacker} onSelectReceiver={this.handleReceiver}/></td>*/}
+              {/*  <tr>*/}
+              {/*    <TagEntry onSelectedTag={this.handleTags}/>*/}
+              {/*    <SaveEntry onSendData={this.handleSendingData}/>*/}
 
-                </tr>
-                <CSVLink data={this.state.rows}>Save (As CSV)</CSVLink>
+              {/*  </tr>*/}
+              {/*  <CSVLink data={this.state.rows}>Save (As CSV)</CSVLink>*/}
 
-                <tr>
-                  <DisplayTable rows={this.state.rows} />
+              {/*  <tr>*/}
+              {/*    <DisplayTable rows={this.state.rows} />*/}
 
-                </tr>
-              </section>
+              {/*  </tr>*/}
+              {/*</section>*/}
           </div>
       </div>
     )

@@ -96,10 +96,14 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "crossfilter": "^1.3.12",
+    "d3": "^6.2.0",
+    "d3-scale-chromatic": "^2.0.0",
     "deepmerge": "^4.0.0",
     "load-script": "^1.0.0",
     "prop-types": "^15.7.2",
-    "react-csv": "^2.0.3"
+    "react-csv": "^2.0.3",
+    "underscore": "^1.11.0"
   },
   "babel": {
     "presets": [
@@ -157,5 +161,6 @@
       "text",
       "html"
     ]
-  }
+  },
+  "lodash": "^3.10.0"
 }
