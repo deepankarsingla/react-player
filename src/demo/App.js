@@ -6,8 +6,7 @@ import TagEntry from './TagEntry'
 import AttackerReceiver from './Attacker-Receiver'
 import  SaveEntry from "./SaveEntry"
 import DisplayTable from './DisplayTable'
-import OverviewGridHist from './Test'
-
+import MusicNotation from './Test'
 import './reset.css'
 import './defaults.css'
 import './range.css'
@@ -199,7 +198,14 @@ class App extends Component {
 
   render () {
     console.log("here......");
+    var filter = [[1000,2000]];
     const rawdata = [{v:33}, {v:10}, {v:6}]
+    const data = [
+      {"id": "1", "Start": "100", "Topic" : "Policy", "Attacker": "1", "Victim": "2"},
+      {"id": "2", "Start": "110", "Topic" : "Policy", "Attacker": "2", "Victim": "3"},
+      {"id": "3", "Start": "120", "Topic" : "Policy", "Attacker": "5", "Victim": "1"},
+      {"id": "4", "Start": "130", "Topic" : "Policy", "Attacker": "6", "Victim": "4"}
+      ]
     const { url, playing, controls, light, volume, muted, loop, played, duration, playbackRate, pip } = this.state
     return (
       <div className='app'>
@@ -276,7 +282,14 @@ class App extends Component {
           </table>
         </section>
           <div>
-            <Bubble useLabels data={rawdata} />
+            <MusicNotation dataCont={data} height={400} width={400}
+
+                           maxlen={200} zoom={5} padding={5}
+            >
+
+
+            </MusicNotation>
+            {/*<Bubble useLabels data={rawdata} />*/}
               {/*<section>*/}
               {/*  <td>*/}
               {/*    <AttackerReceiver onSelectAttacker={this.handleAttacker} onSelectReceiver={this.handleReceiver}/></td>*/}

@@ -1,217 +1,283 @@
 import React from 'react';
 import * as d3 from "d3";
+import * as d3Col from 'd3-scale-chromatic';
+import ReactDOM from 'react-dom';
+// import ParallelAxes from './parallelAxes';
 import crossfilter from 'crossfilter';
 
-const axMax   = (data)  => d3.max(data, (d) => d.value);
+var colorScale = d3.scaleOrdinal(d3Col.schemeSet1);
 
-const rScale = (props,length) => {
+const xScaleTime = (props) => {
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  var todayMillis = today.getTime();
+  var min = new Date();
+  var max = new Date();
+  return d3.scaleTime()
+    .domain([min.setTime(todayMillis+props.filter[0].min), max.setTime(todayMillis+props.filter[0].max)])
+    .range([props.padding, props.width - 2*props.padding]).nice();
+};
+
+const xScaleEq = (props, max) => {
+  var maxVal = props.dataCont.length
+  if(max > maxVal){
+    maxVal = max
+  }
   return d3.scaleLinear()
-    .domain([ 0, axMax(props.dataCont)])
-    .range([2, ((props.height-2*props.padding)/length)/2 - 5]);
+    .domain([0, maxVal])
+    .range([props.padding, props.width - 2*props.padding]).nice();
 };
 
-const rScaleOverall = (props,length) => {
-  return d3.scaleLinear()
-    .domain([ 0, props.maxOverall])
-    .range([0, ((props.height-2*props.padding)/length)/2]);
-};
-
-const scaleColor = d3.scaleLinear()
-  .domain([ 0, 1])
-  .range([0.10, 0.75]);
-
-
-const renderRow = (yLoc, props, length, last) => {
+const renderLines = (mid, props, scale, yLocs, zoom, bundle ) => {
   return (coords, index) => {
-    const rectProps = {
-      x: 1.5*props.padding + index*(props.height-2*props.padding)/length,
-      y: yLoc,
-      width: (props.height-2*props.padding)/length,
-      height: (props.height-2*props.padding)/length,
-      fill: "none",
-      stroke: "#000000",
-    };
 
-    if(last === 1)
-    {
-      var y2 = 1.5*props.padding + (length-1)*(props.height-2*props.padding)/length;
-      return <g key={index} >
-        <rect {...rectProps} />
-        <rect {...rectProps} y = {y2} />
-      </g>
-    }
-    return <rect {...rectProps} key={index} />;
-  };
-};
+    var p1 = +coords.Attacker-1;
+    var p2 = +coords.Victim-1;
 
-const renderGrid = (props, participants, length) => {
-  return (coords, index) => {
-    var y = 1.5*props.padding + index*(props.height-2*props.padding)/length;
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var todayMillis = today.getTime();
+    var dt = new Date();
+    dt.setTime(todayMillis + coords.Time);
 
-    const rectProps = {
-      x: 1.5*props.padding + (length-1)*(props.height-2*props.padding)/length,
-      y: y,
-      width: (props.height-2*props.padding)/length,
-      height: (props.height-2*props.padding)/length,
-      fill: "none",
-      stroke: "#000000",
-    };
-
-    if(index === participants.length-1)
-    {
-      return <g key={index}>
-        <text x={1.5*props.padding - 20} y={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 + 5} fill="black" fontSize="14">{index+1}</text>
-        <text x={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 - 5} y={1.5*props.padding-5} fill="black" fontSize="14">{index+1}</text>
-        {participants.map(renderRow(y, props, length, 1))}
-        <rect {...rectProps} />
-      </g>;
-    }
-
-    return <g key={index}>
-      <text x={1.5*props.padding - 20} y={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 + 5} fill="black" fontSize="14">{index+1}</text>
-      <text x={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 - 5} y={1.5*props.padding-5} fill="black" fontSize="14">{index+1}</text>
-      {participants.map(renderRow(y, props, length, null))}
-      <rect {...rectProps} />
-    </g>;
-  };
-};
-
-const renderCircles = (props, length, yAx) => {
-  return (coords, index) => {
-    const circleProps = {
-      r: yAx(coords.value),
-      cx: 0,
-      cy: 0,
-      opacity:1,
-      fill: "#6fa3ff",
-      className: 'scatter',
+    const lineProps = {
+      strokeWidth: 1.5,//zoom > 1.5 ? 1.5 : zoom+0.5,
+      fill: 'none',
+      stroke: d3Col.schemeSet2[+coords.Attacker-1],
+      opacity: 1,
       key: index,
-    };
-    var p1 = parseInt(coords.key.substring(0, 1)) - 1;
-    var p2 = parseInt(coords.key.substring(2, 3)) - 1;
-    var t = coords.key.substring(1, 2)
+      //    x1: scale(index),
+      //    y1: yLocs[+coords.Attacker-1],
+      //    x2: scale(index),
+      //    y2: yLocs[+coords.Victim-1],
+      markerEnd: "url(#arrow"+ coords.Attacker +")",
+    }
 
-    circleProps.cx = 1.5*props.padding + p2*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2;
-    circleProps.cy = 1.5*props.padding + p1*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2;
+    var path = d3.line()
+      .x(function(d) { return d.x; })
+      .y(function(d) { return d.y; }).curve(d3.curveBasis);
 
-    return <circle {...circleProps}><title>{"N: " + coords.value}</title></circle>;
+    var points = [
+      {x: scale(index), y: yLocs[+coords.Attacker-1]},
+      {x: scale(index), y: yLocs[+coords.Victim-1]}
+    ];
+
+    if(bundle){
+      points = [
+        {x: scale(index), y: yLocs[+coords.Attacker-1]},
+        {x: scale(mid[index].x), y: mid[index].y},
+        {x: scale(index), y: yLocs[+coords.Victim-1]}
+      ];
+    }
+    return <path d={path(points)} {...lineProps}/>
+
   };
 };
 
-const renderTotCircles = (props, length, yAx, role) => {
-  return (coords, index) => {
-    const circleProps = {
-      r: yAx(coords.value),
-      cx: 0,
-      cy: 0,
-      opacity:1,
-      fill: "#6fa3ff",
-      className: 'scatter',
-      key: index,
-    };
-    var p1 = parseInt(coords.key.substring(0, 1)) - 1;
-    var t = coords.key.substring(1, 2);
-    var rl = null;
-    if(role==="Vic") {
-      circleProps.cx = 1.5*props.padding + p1*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2;
-      circleProps.cy = 1.5*props.padding + (length-1)*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2;
-    }
-    else {
-      circleProps.cx = 1.5*props.padding + (length-1)*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2;
-      circleProps.cy = 1.5*props.padding + p1*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2;
-    }
-    return <circle {...circleProps}><title>{"N: " + coords.value}</title></circle>;
-  };
-};
-
-export default class OverviewGridHist extends React.Component {
+export default class MusicNotation extends React.Component{
 
   componentWillMount() {
-    this.setState({crossData: null, crossDataAtt: null, crossDataVic: null, participants: [1,2,3,4], rSc: null});
+    this.setState({scaleTime: null, scaleEq: null, yLocs:[], axLabels:[], top:0 , left: 0, anno: null, txtValue: "", childVisible: false, mid: [], bundle: true});
   }
 
   componentDidMount() {
     this.applyFilter();
     this.forceUpdate();
+    var markerNode1 = ReactDOM.findDOMNode(this.refs.marker1)
+    markerNode1.setAttribute('markerWidth', 6);
+    markerNode1.setAttribute('markerHeight', 4);
+    markerNode1.setAttribute('refX', 6.3);
+    markerNode1.setAttribute('refY', 2);
+    markerNode1.setAttribute('orient', 'auto');
+    var markerNode2 = ReactDOM.findDOMNode(this.refs.marker2)
+    markerNode2.setAttribute('markerWidth', 6);
+    markerNode2.setAttribute('markerHeight', 4);
+    markerNode2.setAttribute('refX', 6.3);
+    markerNode2.setAttribute('refY', 2);
+    markerNode2.setAttribute('orient', 'auto');
+    var markerNode3 = ReactDOM.findDOMNode(this.refs.marker3)
+    markerNode3.setAttribute('markerWidth', 6);
+    markerNode3.setAttribute('markerHeight', 4);
+    markerNode3.setAttribute('refX', 6.3);
+    markerNode3.setAttribute('refY', 2);
+    markerNode3.setAttribute('orient', 'auto');
+    var markerNode4 = ReactDOM.findDOMNode(this.refs.marker4)
+    markerNode4.setAttribute('markerWidth', 6);
+    markerNode4.setAttribute('markerHeight', 4);
+    markerNode4.setAttribute('refX', 6.3);
+    markerNode4.setAttribute('refY', 2);
+    markerNode4.setAttribute('orient', 'auto');
+
+    var markerShadowNode = ReactDOM.findDOMNode(this.refs.markerShadow)
+    markerShadowNode.setAttribute('markerWidth', 6);
+    markerShadowNode.setAttribute('markerHeight', 4);
+    markerShadowNode.setAttribute('refX', 6.3);
+    markerShadowNode.setAttribute('refY', 2);
+    markerShadowNode.setAttribute('orient', 'auto');
+
   }
 
-  componentWillReceiveProps() {
-    this.applyFilter();
+  componentDidUpdate() {
+    var e = this.svg;
+    if(e) {
+      var dim = e.getBoundingClientRect();
+      this.state.left = dim.left;
+      this.state.top = dim.top;
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    //this.applyFilter();
+    if(nextProps.maxLen != this.props.maxLen){
+      console.log(nextProps.maxLen)
+      var scalingprops = { ...nextProps, width: nextProps.width*nextProps.zoom};
+      // this.state.scaleTime = xScaleTime(scalingprops);
+      this.state.scaleEq = xScaleEq(scalingprops, this.props.maxLen);
+    }
   }
 
   applyFilter() {
     if(this.props.dataCont != null) {
-      var participants = this.state.participants;
+      var scalingprops = { ...this.props, width: this.props.width*this.props.zoom};
+      // this.state.scaleTime = xScaleTime(scalingprops);
+      this.state.scaleEq = xScaleEq(scalingprops, this.props.maxLen);
+      this.state.axLabels = ["1","2","3","4"];
 
-      var crossS1 = crossfilter(this.props.dataCont);
-      var typeDimensionS1 = crossS1.dimension(function(d) { return d.Attacker + "A"; });
-      var scoreDimGroupS1 = typeDimensionS1.group().reduceCount();
-      var dS1 = scoreDimGroupS1.top(Infinity);
+      this.state.yLocs = [];
+      var axDist = (this.props.height - this.props.padding*3)/(4-1);
+      var pad = this.props.padding*2;
+      for(var i=0; i < 4 ;i++) {
+        this.state.yLocs.push(pad + axDist*i);
+      }
 
-      var crossS2 = crossfilter(this.props.dataCont);
-      var typeDimensionS2 = crossS2.dimension(function(d) { return d.Victim + "A"; });
-      var scoreDimGroupS2 = typeDimensionS2.group().reduceCount();
-      var dS2 = scoreDimGroupS2.top(Infinity);
+      if(this.state.bundle){
+        var count = 1;
+        var data = this.props.dataCont;
+        this.state.mid = [];
+        var start = 0;
+        var stop = 0;
+        for(var i=1; i < data.length; i++) {
+          if(data[i].Attacker === data[i-1].Attacker && data[i].Victim === data[i-1].Victim) {
+            count = count + 1;
+          }
+          else {
+            stop = i - 1;
+            var minP = d3.min([this.state.yLocs[+data[i-1].Attacker-1], this.state.yLocs[+data[i-1].Victim-1]]);
+            var maxP = d3.max([this.state.yLocs[+data[i-1].Attacker-1], this.state.yLocs[+data[i-1].Victim-1]]);
+            var y = minP + Math.abs(maxP - minP)/2;
+            if(count > 1) {
+              for(var j = i - count; j < i; j++) {
+                var xTmp = start + ((stop-start)/2);
+                if(this.props.scaleType === "Time") {
+                  xTmp = (data[Math.floor(xTmp)].Time + data[Math.ceil(xTmp)].Time)/2;
+                }
+                this.state.mid.push({
+                  x: xTmp,
+                  y: y
+                });
+              }
+            }
+            else{
+              for(var j = i - count; j < i; j++) {
+                var xTmp = j;
+                if(this.props.scaleType === "Time") {
+                  xTmp = data[j].Time;
+                }
+                this.state.mid.push({
+                  x: xTmp,
+                  y: y
+                });
+              }
+            }
 
-      var scalingprops = { ...this.props, dataCont: dS1.concat(dS2)};
-      this.state.rSc= rScale(scalingprops, this.state.participants.length+1.5); //Axis scale
-
-      var tmpData = this.props.dataCont;
-
-      var cross1 = crossfilter(this.props.dataCont);
-      var typeDimension1 = cross1.dimension(function(d) { return d.Attacker + "A" + d.Victim; });
-      var scoreDimGroup1 = typeDimension1.group().reduceCount();
-      this.state.crossData = scoreDimGroup1.top(Infinity);
-
-      var cross3 = crossfilter(this.props.dataCont);
-      var typeDimension3 = cross3.dimension(function(d) { return d.Attacker + "A"; });
-      var scoreDimGroup3 = typeDimension3.group().reduceCount();
-      this.state.crossDataAtt = scoreDimGroup3.top(Infinity);
-
-      var cross5 = crossfilter(this.props.dataCont);
-      var typeDimension5 = cross5.dimension(function(d) { return d.Victim + "A"; });
-      var scoreDimGroup5 = typeDimension5.group().reduceCount();
-      this.state.crossDataVic = scoreDimGroup5.top(Infinity);
+            start = i;
+            count = 1;
+          }
+        }
+        stop = data.length - 1;
+        var minP = d3.min([this.state.yLocs[+data[stop].Attacker-1], this.state.yLocs[+data[stop].Victim-1]]);
+        var maxP = d3.max([this.state.yLocs[+data[stop].Attacker-1], this.state.yLocs[+data[stop].Victim-1]]);
+        var y = minP + Math.abs(maxP - minP)/2;
+        for(var j = data.length - count; j < data.length; j++) {
+          var xTmp = start + ((stop-start)/2);
+          if(this.props.scaleType === "Time") {
+            xTmp = (data[Math.floor(xTmp)].Time + data[Math.ceil(xTmp)].Time)/2;
+          }
+          this.state.mid.push({
+            x: xTmp,
+            y: y
+          });
+        }
+      }
     }
   }
 
-  ttmouseOver(event,txt) {
-    this.props.onTooltip(true,event.clientX,event.clientY,txt);
+  onZoomIn() {
+    //  var newZ = this.props.zoom + 0.1;
+//    this.props.onZoom(newZ);
   }
 
-  ttmouseOut(event) {
-    this.props.onTooltip(false,event.clientX,event.clientY,null);
+  onZoomOut() {
+    //  var newZ = this.props.zoom - 0.1;
+    //  this.props.onZoom(newZ);
   }
 
-  itemClick() {
-    this.props.datasetChanged(this.props.name);
+  onToggleBundle() {
+    var tmp = !this.state.bundle;
+    this.setState({bundle: tmp});
+  }
+
+
+  move(dir) {
+    this.props.moveGroup(dir, {id:(this.props.subjectName + this.props.groupName),group:this.props.groupName, subject:this.props.subjectName})
+  }
+
+  remove() {
+    this.props.removeGroup({id:(this.props.subjectName + this.props.groupName),group:this.props.groupName, subject:this.props.subjectName})
   }
 
   render() {
-    if(this.state.crossData == null) {
-      return <div className="dataSelectTile"  style={{height: this.props.height}} style={this.props.position}><p>{this.props.name}</p><p>No Data</p></div>
-    }
-    else {
-      this.applyFilter();
-      var overallSc = rScaleOverall(this.props, this.state.participants.length+1.5);
-      return (
-        <div className="dataSelectTile" title={this.props.overallVal} style={{...this.props.position}}>
-          <svg width={this.props.width} height={this.props.height}  onClick={this.itemClick.bind(this)}>
-            <text x="6" y="20" fill="black" fontSize="18">{this.props.name}</text>
-            <text x={(this.props.height/2 *-1) - this.props.padding/2} y={this.props.padding-10} fill="black" fontSize="15" transform="rotate(-90)" >Actor</text>
-            <text x={this.props.height/2 - this.props.padding/1.4} y={this.props.padding} fill="black" fontSize="15">Recipient</text>
-            <text x={(this.props.height/2) - this.props.padding-10} y={-this.props.height +10} fill="black" fontSize="15" transform="rotate(90)" >Total Initiated</text>
-            <text x={this.props.height/2 - this.props.padding} y={this.props.height -5} fill="black" fontSize="15">Total Recieved</text>
-
-            <g>
-              {this.state.participants.map(renderGrid(this.props, this.state.participants, this.state.participants.length +1.5))}
-              {this.state.crossData.map(renderCircles(this.props, this.state.participants.length+1.5, this.state.rSc, this.ttmouseOver.bind(this), this.ttmouseOut.bind(this)))}
-              {this.state.crossDataVic.map(renderTotCircles(this.props, this.state.participants.length+1.5, this.state.rSc, "Vic", this.ttmouseOver.bind(this), this.ttmouseOut.bind(this)))}
-              {this.state.crossDataAtt.map(renderTotCircles(this.props, this.state.participants.length+1.5, this.state.rSc, "Att", this.ttmouseOver.bind(this), this.ttmouseOut.bind(this)))}
-            </g>
+    this.applyFilter();
+    var scale = this.state.scaleEq;
+    var color1 = "#1abc9c";
+    var color2 = "#00767b";
+    return (
+      <div style={{borderBottom:"6px solid #111111",background: "#ffffff", height:this.props.height+12+6,}}>
+        <div style={{width:100, height:this.props.height+12+6, background: colorScale(this.props.subjectName), float:"left"}}>
+          <div>{"Group " + this.props.groupName}</div>
+          <button onClick={() => this.move("up")}><i class="fa fa-arrow-up"></i></button>
+          <button onClick={() => this.move("down")}><i class="fa fa-arrow-down"></i></button>
+          <button onClick={() => this.remove("up")}><i class="fa fa-close"></i></button>
+        </div>
+        <div style={{width:this.props.width, overflowX: "auto", overflowY: "hidden", background: "#ffffff", padding:0, marginLeft:102}}>
+          <svg width={this.props.width*this.props.zoom} height={this.props.height}>
+            <marker ref="marker1" id="arrow1">
+              <path d="M 0 0 L 6 2 L 0 4 z" fill={d3Col.schemeSet2[0]} />
+            </marker>
+            <marker ref="marker2" id="arrow2">
+              <path d="M 0 0 L 6 2 L 0 4 z" fill={d3Col.schemeSet2[1]} />
+            </marker>
+            <marker ref="marker3" id="arrow3">
+              <path d="M 0 0 L 6 2 L 0 4 z" fill={d3Col.schemeSet2[2]} />
+            </marker>
+            <marker ref="marker4" id="arrow4">
+              <path d="M 0 0 L 6 2 L 0 4 z" fill={d3Col.schemeSet2[3]} />
+            </marker>
+            <marker ref="markerShadow" id="arrowShadowMusic">
+              <path d="M 0 0 L 6 2 L 0 4 z" fill="#a2a2a2" />
+            </marker>
+            { this.props.dataCont === null
+              ? null
+              : <g>
+                <g className="scatterArea">
+                  {this.props.dataCont.map(renderLines(this.state.mid, this.props, scale, this.state.yLocs, this.props.zoom, this.state.bundle))}
+                </g>
+                {/*<ParallelAxes scales={scale} yLocs={this.state.yLocs} labels={this.state.axLabels} ticks={Math.ceil(this.props.zoom*11)} max={this.props.dataCont.length}/>*/}
+              </g>
+            }
           </svg>
         </div>
-      );
-    }
+      </div>
+    );
   }
 }
