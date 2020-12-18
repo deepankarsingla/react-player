@@ -2,59 +2,198 @@ $column-width: 700px;
 $gutter-width: 20px;
 
 .app {
-  margin: auto;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
-  text-align: center;
+  width: 100%;
+  height:100vh;
+
 }
 
-.section {
-  display: inline-block;
-  max-width: $column-width;
-  margin: $gutter-width;
-  text-align: left;
-  vertical-align: top;
-  float: left;
-  min-height: 100vh;
+.header{
+  height: 10%;
 }
+
 
 .player-wrapper {
   width: 100%;
-  height: 270px;
+  height: 40%;
+  display: inline-block;
+  text-align: left;
+  vertical-align: top;
+  float: left;
 }
 
-.react-player {
-  margin-bottom: 10px;
-  background: rgba(0, 0, 0, .1);
-}
+/*.react-player {*/
+/*  margin-bottom: 10px;*/
+/*  background: rgba(0, 0, 0, .1);*/
+/*}*/
 
-.faded {
-  color: rgba(0, 0, 0, .5);
-}
+/*.faded {*/
+/*  color: rgba(0, 0, 0, .5);*/
+/*}*/
 
-.footer {
-  margin: $gutter-width;
+/*.footer {*/
+/*  margin: $gutter-width;*/
+/*}*/
+.url-box-right{
+  width: 75%;
+  display: inline-block;
+  float: right;
 }
 .url-input-box{
-  width: 90%;
+  width: 420px;
 }
-.tag-entry-box-attacker button{
-  float: left;
-}
+/*.tag-entry-box-attacker button{*/
+/*  float: left;*/
+/*}*/
 
-.tag-entry-box-receiver button{
-  float: left;
-}
+/*.tag-entry-box-receiver button{*/
+/*  float: left;*/
+/*}*/
 
-.tag-entry-box button,  .tag-entry-box input, .tag-entry-box select{
-  float: left;
-}
+/*.tag-entry-box button,  .tag-entry-box input, .tag-entry-box select{*/
+/*  float: left;*/
+/*}*/
 
 .tag-entry-box select{
-  width: 140px;
+  width: 152px;
 }
 
-.attacker-select, .receiver-select{
-  width: 140px;
+.attacker-select, .receiver-select, .tag-select{
+  width: 211px;
   height: 120px;
 }
+/*.bubble{*/
+/*  margin-top: 50px;*/
+/*}*/
+/*.dataSelectTile{*/
+/*  width: 600px;*/
+/*  height: 600px;*/
+/*}*/
+
+.project-name-left{
+  float: left;
+  width: 25%;
+  display: inline-block;
+  font-size: 23px;
+}
+/*.header {*/
+/*  width:900px;*/
+/*  float:left;*/
+/*  background: pink;*/
+/*  height: 50px;*/
+/*}*/
+/*.player{*/
+/*  width: 100%;*/
+/*  height: 10%;*/
+/*}*/
+/*.player-seek{*/
+/*  float: right;*/
+/*  width: 80%;*/
+/*}*/
+.player-button{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 5%;
+}
+.add-tag{
+  height: 30%;
+  width: 100%;
+}
+.tag-left{
+  float: left;
+  display: inline-block;
+  width: 60%;
+  height: 100%;
+}
+.tag-right{
+  float: right;
+  display: inline-block;
+  width: 30%;
+  height: 100%;
+}
+.save-button{
+  float: right;
+  width: 50%;
+  display: inline-block;
+}
+.display-table{
+  width: 94%;
+  height: 45%;
+  margin-right: 10px;
+  margin-top:25px;
+}
+.page-left{
+  float: left;
+  width: 45%;
+  display: inline-block;
+  height: 95%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+
+}
+.page-right{
+  float: right;
+  width: 50%;
+  display: inline-block;
+  height: 95%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.tag-entry-box-attacker{
+  width: 30%;
+  height: 120px;
+  margin-top: 40px;
+  margin-bottom: 3px;
+  display: inline-block;
+  margin-right: 90px;
+}
+
+.tag-entry-box-receiver{
+  width: 30%;
+  height: 120px;
+  margin-top: 40px;
+  margin-bottom: 3px;
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.tag-right{
+  float: right;
+  width: 33%;
+  height: 140px;
+  margin-bottom: 3px;
+  margin-top: 40px;
+}
+
+.add-tag-button{
+  height: 5%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+/*
+for right part
+ */
+.beta {
+  margin-left: 20px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+.beta table,.beta td,.beta th {
+  border: 1px solid black;
+}
+.dataSelectTile{
+  float:right;
+}
+.tick{
+  margin-left: 5px;
+}
+.plot{
+  margin-left: 15px;
+  height: 45%;
+}
+

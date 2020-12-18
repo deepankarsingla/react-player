@@ -163,9 +163,18 @@ class Bubble extends Component {
   render() {
     if (this.state.data.length) {
       return (
-        <svg width={this.props.width} height={this.props.height}>
-          {this.renderBubbles(this.state.data)}
-        </svg>
+        <div className="dataSelectTile">
+          <svg width={this.props.width} height={this.props.height}>
+            <text x="6" y="20" fill="black" fontSize="18">{this.props.name}</text>
+            <text x={(this.props.height/2 *-1) - this.props.padding/2} y={this.props.padding-10} fill="black" fontSize="15" transform="rotate(-90)" >Actor</text>
+            <text x={this.props.height/2 - this.props.padding/1.4} y={this.props.padding} fill="black" fontSize="15">Recipient</text>
+            <text x={(this.props.height/2) - this.props.padding-10} y={-this.props.height +10} fill="black" fontSize="15" transform="rotate(90)" >Total Initiated</text>
+            <text x={this.props.height/2 - this.props.padding} y={this.props.height -5} fill="black" fontSize="15">Total Recieved</text>
+          </svg>
+        </div>
+        // <svg width={this.props.width} height={this.props.height}>
+        //   {this.renderBubbles(this.state.data)}
+        // </svg>
       );
     }
 

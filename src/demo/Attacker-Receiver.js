@@ -11,9 +11,9 @@ class AttackerReceiver extends Component {
     this.getReceiverName = this.getReceiverName.bind(this)
 
     this.state = {
-      attackerList: ["All", "Audience","Host", "Donald Trump", "Hillary Clinton"],
+      attackerList: ["All" ,"Host", "Trump", "Joe", "Audience"],
       attacker: '',
-      receiverList: ["All", "Audience","Host", "Donald Trump", "Hillary Clinton"],
+      receiverList: ["All", "Host", "Trump", "Joe", "Audience"],
       receiver: '',
       isClickedAttacker: false,
       isClickedReceiver: false
@@ -21,23 +21,11 @@ class AttackerReceiver extends Component {
   }
 
   getAttackerName = e => {
-    console.log(e.target.value);
       this.props.onSelectAttacker(e.target.value);
-
     }
 
   getReceiverName = e => {
     this.props.onSelectReceiver(e.target.value);
-
-  }
-
-
-  addAttacker = ev => {
-    this.setState({ isClickedAttacker: true })
-  }
-
-  addReceiver = ev => {
-    this.setState({ isClickedReceiver: true })
   }
 
   handleChangeAttacker (e) {
@@ -50,7 +38,6 @@ class AttackerReceiver extends Component {
 
   keyPressAttacker (e) {
     if (e.keyCode == 13) {
-      console.log('value', e.target.value)
       var attackerList = [...this.state.attackerList]
       attackerList.push(e.target.value)
       this.setState({
@@ -73,22 +60,14 @@ class AttackerReceiver extends Component {
   }
 
     render () {
-      // const isClickedAttacker = this.state.isClickedAttacker
-      // let buttonAttacker
-      // if (isClickedAttacker) {
-      //   buttonAttacker = <input type='text' value={this.state.attacker} onChange={this.handleChangeAttacker} onKeyDown={this.keyPressAttacker} />
-      // }
-      //
-      // const isClickedReceiver = this.state.isClickedReceiver
-      // let buttonReceiver
-      // if (isClickedReceiver) {
-      //   buttonReceiver = <input type='text' value={this.state.receiver} onChange={this.handleChangeReceiver} onKeyDown={this.keyPressReceiver} />
-      // }
       return (
-        <div>
+        <div className='tag-left'>
           <div className='tag-entry-box-attacker'>
-            <button onClick={this.addAttacker}>Attacker</button>
-            <input type='text' value={this.state.attacker} onChange={this.handleChangeAttacker} onKeyDown={this.keyPressAttacker} />
+            <input type='text' value={this.state.attacker}
+                   onChange={this.handleChangeAttacker}
+                   onKeyDown={this.keyPressAttacker}
+                   type='text' placeholder='Enter Attacker'
+            />
             <select className='attacker-select' name='color4' size='5' multiple onChange={this.getAttackerName}>
             {this.state.attackerList.map(function (todo) {
                 return <option key={todo}>{todo}</option>
@@ -97,8 +76,11 @@ class AttackerReceiver extends Component {
             </select>
           </div>
           <div className='tag-entry-box-receiver'>
-            <button onClick={this.addReceiver}>Receiver</button>
-            <input type='text' value={this.state.receiver} onChange={this.handleChangeReceiver} onKeyDown={this.keyPressReceiver} />
+            <input type='text' value={this.state.receiver}
+                   onChange={this.handleChangeReceiver}
+                   onKeyDown={this.keyPressReceiver}
+                   type='text' placeholder='Enter Receiver'
+            />
             <select className='receiver-select' name='color4' size='5' multiple onChange={this.getReceiverName}>
               {this.state.receiverList.map(function (todo) {
                 return <option key={todo}>{todo}</option>

@@ -32,19 +32,26 @@ const renderRow = (yLoc, props, length, last) => {
       stroke: "#000000",
     };
 
+    const lineProps = {
+        x1:  1.5*props.padding + index*(props.height-2*props.padding)/length,
+        y1: 1.5*props.padding + (length-1)*(props.height-2*props.padding)/length,
+        x2: 1.5*props.padding + index*(props.height-2*props.padding)/length,
+        y2: 1.5*props.padding + (length-1)*(props.height-2*props.padding)/length + (props.height-2*props.padding)/length,
+        stroke:"gray",
+    };
+
     if(last === 1)
     {
-      var y2 = 1.5*props.padding + (length-1)*(props.height-2*props.padding)/length;
-      return <g key={index} >
+      return <g>
         <rect {...rectProps} />
-        <rect {...rectProps} y = {y2} />
+        <line {...lineProps}/>
       </g>
     }
     return <rect {...rectProps} key={index} />;
   };
 };
 
-const renderGrid = (props, participants, length) => {
+const renderGrid = (props, participants, participantsName, length) => {
   return (coords, index) => {
     var y = 1.5*props.padding + index*(props.height-2*props.padding)/length;
 
@@ -60,16 +67,17 @@ const renderGrid = (props, participants, length) => {
     if(index === participants.length-1)
     {
       return <g key={index}>
-        <text x={1.5*props.padding - 20} y={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 + 5} fill="black" fontSize="14">{index+1}</text>
-        <text x={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 - 5} y={1.5*props.padding-5} fill="black" fontSize="14">{index+1}</text>
+        <text x={1.5*props.padding - 60} y={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 + 5} fill="black" fontSize="14">{participantsName[index]}</text>
+        <text x={1.3*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 - 5} y={1.5*props.padding-5} fill="black" fontSize="14">{participantsName[index]}</text>
         {participants.map(renderRow(y, props, length, 1))}
         <rect {...rectProps} />
       </g>;
     }
 
     return <g key={index}>
-      <text x={1.5*props.padding - 20} y={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 + 5} fill="black" fontSize="14">{index+1}</text>
-      <text x={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 - 5} y={1.5*props.padding-5} fill="black" fontSize="14">{index+1}</text>
+      <text x={1.5*props.padding - 60} y={1.5*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 + 5} fill="black" fontSize="14">{participantsName[index]}</text>
+      <text x={1.3*props.padding + index*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2 - 5} y={1.5*props.padding-5} fill="black"
+            fontSize="14" >{participantsName[index]}</text>
       {participants.map(renderRow(y, props, length, null))}
       <rect {...rectProps} />
     </g>;
@@ -78,6 +86,7 @@ const renderGrid = (props, participants, length) => {
 
 const renderCircles = (props, length, yAx) => {
   return (coords, index) => {
+
     const circleProps = {
       r: yAx(coords.value),
       cx: 0,
@@ -89,7 +98,6 @@ const renderCircles = (props, length, yAx) => {
     };
     var p1 = parseInt(coords.key.substring(0, 1)) - 1;
     var p2 = parseInt(coords.key.substring(2, 3)) - 1;
-    var t = coords.key.substring(1, 2)
 
     circleProps.cx = 1.5*props.padding + p2*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2;
     circleProps.cy = 1.5*props.padding + p1*(props.height-2*props.padding)/length + ((props.height-2*props.padding)/length)/2;
@@ -97,6 +105,8 @@ const renderCircles = (props, length, yAx) => {
     return <circle {...circleProps}><title>{"N: " + coords.value}</title></circle>;
   };
 };
+
+
 
 const renderTotCircles = (props, length, yAx, role) => {
   return (coords, index) => {
@@ -127,7 +137,7 @@ const renderTotCircles = (props, length, yAx, role) => {
 export default class OverviewGridHist extends React.Component {
 
   componentWillMount() {
-    this.setState({crossData: null, crossDataAtt: null, crossDataVic: null, participants: [1,2,3,4], rSc: null});
+    this.setState({crossData: null, crossDataAtt: null, crossDataVic: null, participants: new Map(), participantsName:[], rSc: null});
   }
 
   componentDidMount() {
@@ -140,11 +150,20 @@ export default class OverviewGridHist extends React.Component {
   }
 
   applyFilter() {
-    if(this.props.dataCont != null) {
-      var participants = this.state.participants;
+    if(this.props.dataCont != null && this.props.participants !=null) {
+      this.state.participantsName = Array.from(this.props.participants);
+      let participantsMap = new Map();
+      let participants = []
+      this.state.participantsName.forEach(function (value, i) {
+        participantsMap.set(value, i+1);
+        participants.push(i+1);
+      });
+
+      this.state.participants = participants;
 
       var crossS1 = crossfilter(this.props.dataCont);
       var typeDimensionS1 = crossS1.dimension(function(d) { return d.Attacker + "A"; });
+
       var scoreDimGroupS1 = typeDimensionS1.group().reduceCount();
       var dS1 = scoreDimGroupS1.top(Infinity);
 
@@ -156,20 +175,21 @@ export default class OverviewGridHist extends React.Component {
       var scalingprops = { ...this.props, dataCont: dS1.concat(dS2)};
       this.state.rSc= rScale(scalingprops, this.state.participants.length+1.5); //Axis scale
 
-      var tmpData = this.props.dataCont;
-
       var cross1 = crossfilter(this.props.dataCont);
-      var typeDimension1 = cross1.dimension(function(d) { return d.Attacker + "A" + d.Victim; });
+      var typeDimension1 = cross1.dimension(function(d) { return participantsMap.get(d.Attacker) + "A" + participantsMap.get(d.Victim); });
+
+
       var scoreDimGroup1 = typeDimension1.group().reduceCount();
+
       this.state.crossData = scoreDimGroup1.top(Infinity);
 
       var cross3 = crossfilter(this.props.dataCont);
-      var typeDimension3 = cross3.dimension(function(d) { return d.Attacker + "A"; });
+      var typeDimension3 = cross3.dimension(function(d) { return participantsMap.get(d.Attacker) + "A"; });
       var scoreDimGroup3 = typeDimension3.group().reduceCount();
       this.state.crossDataAtt = scoreDimGroup3.top(Infinity);
 
       var cross5 = crossfilter(this.props.dataCont);
-      var typeDimension5 = cross5.dimension(function(d) { return d.Victim + "A"; });
+      var typeDimension5 = cross5.dimension(function(d) { return participantsMap.get(d.Victim) + "A"; });
       var scoreDimGroup5 = typeDimension5.group().reduceCount();
       this.state.crossDataVic = scoreDimGroup5.top(Infinity);
     }
@@ -198,13 +218,13 @@ export default class OverviewGridHist extends React.Component {
         <div className="dataSelectTile" title={this.props.overallVal} style={{...this.props.position}}>
           <svg width={this.props.width} height={this.props.height}  onClick={this.itemClick.bind(this)}>
             <text x="6" y="20" fill="black" fontSize="18">{this.props.name}</text>
-            <text x={(this.props.height/2 *-1) - this.props.padding/2} y={this.props.padding-10} fill="black" fontSize="15" transform="rotate(-90)" >Actor</text>
-            <text x={this.props.height/2 - this.props.padding/1.4} y={this.props.padding} fill="black" fontSize="15">Recipient</text>
-            <text x={(this.props.height/2) - this.props.padding-10} y={-this.props.height +10} fill="black" fontSize="15" transform="rotate(90)" >Total Initiated</text>
-            <text x={this.props.height/2 - this.props.padding} y={this.props.height -5} fill="black" fontSize="15">Total Recieved</text>
+            <text x={(this.props.height/2 *-1) - this.props.padding/2} y={this.props.padding-50} fill="black" fontSize="18" transform="rotate(-90)" >Actor</text>
+            <text x={this.props.height/2 - this.props.padding/1.4} y={this.props.padding} fill="black" fontSize="18">Recipient</text>
+            <text x={(this.props.height/2) - this.props.padding-10} y={-this.props.height +10} fill="black" fontSize="18" transform="rotate(90)" >Total Initiated</text>
+            <text x={this.props.height/2 - this.props.padding} y={this.props.height-10} fill="black" fontSize="18">Total Recieved</text>
 
             <g>
-              {this.state.participants.map(renderGrid(this.props, this.state.participants, this.state.participants.length +1.5))}
+              {this.state.participants.map(renderGrid(this.props, this.state.participants, this.state.participantsName,this.state.participants.length +1.5))}
               {this.state.crossData.map(renderCircles(this.props, this.state.participants.length+1.5, this.state.rSc, this.ttmouseOver.bind(this), this.ttmouseOut.bind(this)))}
               {this.state.crossDataVic.map(renderTotCircles(this.props, this.state.participants.length+1.5, this.state.rSc, "Vic", this.ttmouseOver.bind(this), this.ttmouseOut.bind(this)))}
               {this.state.crossDataAtt.map(renderTotCircles(this.props, this.state.participants.length+1.5, this.state.rSc, "Att", this.ttmouseOver.bind(this), this.ttmouseOut.bind(this)))}
