@@ -301,8 +301,8 @@ class App extends Component {
           {/*// <RankLine data={this.state.rows} height={450} width ={650} padding={70} />*/}
 
           <div className='plot'>
-            <button onClick={() => this.handleClick(true)}>Music Notation</button>
-            <button onClick={() => this.handleClick(false)}>Balloon Plot</button>
+            <button onClick={() => this.handleClick(true)}>Balloon Plot</button>
+            <button onClick={() => this.handleClick(false)}>Music Notation</button>
             {condition === true ?
 
               <OverviewGridHist dataCont={this.state.rows} height={400} width ={600} padding={65}
